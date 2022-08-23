@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form  onsubmit="saveTolocal(event)">
+        <label>Name</label>
+        <input  id="nam" type="text" name="name"/>
+        <label>Email</label>
+        <input id="eml" type="text" name="email"/>
+        <label>age</label>
+        <input  id="num" type="age" name="age"/>
+        <button>submit</button>
+    </form>
+    <ul id="listOfUsers"></ul>
+    <script type="text/javascript">
+        
+   function saveTolocal(event){
+    event.preventDefault();
+   
+    var names=event.target.name.value;
+    var emails=event.target.email.value;
+     var ages=event.target.age.value;
+    var  myObj={
+    names,
+    emails,
+    ages
+};
+     
+      
+      localStorage.setItem(myObj.emails ,JSON.stringify(myObj));
+      console.log(localStorage);
+         show(myObj)
+    
+     
+   
+   }
+
+
+   function show(user){
+    //if(localStorage.getItem(user.emails) !==null){
+       // removeUserFromScreen(user.emails);
+    //}
+    var parentNode=document.getElementById('listOfUsers');
+    //console.log(parentNode);
+    //var childNode=`<li> id="
+    var childNode=`<li id=${user.emails}> ${user.names} - ${user.emails} -${user.ages} 
+        <button onclick=deleteUser('${user.emails}')>Delete</button>
+        <button onclick=editUserDetails('${user.emails}','${user.names}','${user.ages}')>Edit</button>
+        </li>`;
+    parentNode.innerHTML=parentNode.innerHTML + childNode;
+
+    }    
+    
+   function deleteUser(emails){
+        console.log(emails);
+        localStorage.removeItem(emails);
+        removeUserFromScreen(emails);
+   }
+   function editUserDetails(emails,names,ages){
+    document.getElementById('eml').value=emails;
+        document.getElementById('nam').value=names;
+        document.getElementById('num').value=ages;
+          deleteUser(emails) ;
+   }
+   function  removeUserFromScreen(emails){
+    const parentNode=document.getElementById("listOfUsers");
+    console.log(parentNode);
+   const childNodeToBeDeleted=document.getElementById(emails);
+   console.log(childNodeToBeDeleted);
+    parentNode.removeChild(childNodeToBeDeleted);
+   }
+ 
+
+  
+   
+
+      window.addEventListener("DOMContentLoaded" ,()=>{
+     var localStorsgeObj=localStorage;
+     //console.log(localStorsgeObj);
+     var localstoragekeys=Object.keys(localStorsgeObj);
+     //console.log(localstoragekeys);
+     for(let i=0;i<localstoragekeys.length;i++){
+        var key=localstoragekeys[i];
+       //console.log(key);
+        var userdetailsString=localStorsgeObj[key];
+       // console.log(userdetailsString);
+        var userDetailsObj=JSON.parse(userdetailsString);
+       // console.log(userDetailsObj);
+           show(userDetailsObj);
+           
+        
+
+     }
+    });
+
+
+    
+      
+    </script>
+</body>
+</html>
